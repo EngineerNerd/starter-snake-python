@@ -39,7 +39,7 @@ def start():
             initialize your snake state here using the
             request's data if necessary.
     """
-    print(json.dumps(data))
+    #print(json.dumps(data))
 
     color = "#00FF00"
 
@@ -54,11 +54,13 @@ def move():
     TODO: Using the data from the endpoint request object, your
             snake AI must choose a direction to move in.
     """
-    print(json.dumps(data))
+    #print(json.dumps(data))
 
     directions = ['up', 'down', 'left', 'right']
     direction = random.choice(directions)
 
+    direction = 'right'
+    
     return move_response(direction)
 
 
@@ -70,7 +72,7 @@ def end():
     TODO: If your snake AI was stateful,
         clean up any stateful objects here.
     """
-    print(json.dumps(data))
+    #print(json.dumps(data))
 
     return end_response()
 
