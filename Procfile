@@ -1,1 +1,1 @@
-web: gunicorn app.goRightTest:application --worker-class gevent
+web: gunicorn app.DryBones:application --worker-class gevent
