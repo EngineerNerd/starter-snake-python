@@ -55,6 +55,8 @@ def move():
     jsonData = bottle.request.json
     #print(jsonData)
     
+    print("\n\n",jsonData["turn"])
+    
     height_of_board = jsonData["board"]["height"]
     width_of_board = jsonData["board"]["width"]
     my_head_x_component= jsonData["you"]["body"][0]["x"]
@@ -115,7 +117,7 @@ def move():
     
     e = 1
     
-    number_of_simulations_to_run=50
+    number_of_simulations_to_run=20
     
     
      # ------------------------------------------------------------------------------------------------------------------------------------------- 1
@@ -337,7 +339,7 @@ def move():
     
     
     
-    print("\n\nBest Direction: ", best_direction,"\nLast Location: ", last_location,"\n Number of simulations survived: ", number_of_simulations_survived)
+    print("Best Direction: ", best_direction,"\nLast Location: ", last_location,"\n Number of simulations survived: ", number_of_simulations_survived)
     
     Direction=best_direction
     
@@ -346,6 +348,8 @@ def move():
     
     endtime=time.time()
     print("time: " , endtime-starttime)
+    if endtime-starttime > .250:
+        print("Overtime!")
     
     return move_response(Direction)
 
