@@ -59,7 +59,7 @@ def move():
     directions = ['up', 'down', 'left', 'right']
     direction = random.choice(directions)
 
-    direction = 'right'
+    direction = 'down'
     
     return move_response(direction)
 
