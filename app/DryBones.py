@@ -2,6 +2,7 @@ import json
 import os
 import random
 import bottle
+import time
 
 from api import ping_response, start_response, move_response, end_response
 
@@ -349,7 +350,7 @@ def move():
     return move_response(Direction)
 
 
-    def choose_direction(jsonData,my_head_x_component,my_head_y_component):
+def choose_direction(jsonData,my_head_x_component,my_head_y_component):
     
     food_location_relative_to_me=find_food_location_relative_to_me(jsonData,my_head_x_component,my_head_y_component)
     #print("Food location relative to me: " ,food_location_relative_to_me)
