@@ -1,27 +1,57 @@
-# Imported a bunch of stuff even though this snake is not using AStar or random yet
-from flask import Flask, request, jsonify
 import json
+import os
 import random
-import time
+import bottle
+
+from api import ping_response, start_response, move_response, end_response
 
 from print_grid import *
 
-app = Flask(__name__)
+@bottle.route('/')
+def index():
+    return '''
+    Battlesnake documentation can be found at
+       <a href="https://docs.battlesnake.io">https://docs.battlesnake.io</a>.
+    '''
 
-@app.route("/start", methods=["GET","HEAD","POST","PUT"])
+@bottle.route('/static/<path:path>')
+def static(path):
+    """
+    Given a path, return the static file located relative
+    to the static folder.
+
+    This can be used to return the snake head URL in an API response.
+    """
+    return bottle.static_file(path, root='static/')
+
+@bottle.post('/ping')
+def ping():
+    """
+    A keep-alive endpoint used to prevent cloud application platforms,
+    such as Heroku, from sleeping the application instance.
+    """
+    return ping_response()
+
+@bottle.post('/start')
 def start():
-    print(request.data)
-    snake = {
-        "color": "#C0C0C0",
-        "name": "Samwise"
-    }
-    return jsonify(snake)
+    data = bottle.request.json
 
-@app.route("/move", methods=["GET","HEAD","POST","PUT"])
+    """
+    TODO: If you intend to have a stateful snake AI,
+            initialize your snake state here using the
+            request's data if necessary.
+    """
+    #print(json.dumps(data))
+
+    color = "#C0C0C0"
+
+    return start_response(color)
+
+
+@bottle.post('/move')
 def move():
     starttime = time.time()
-    jsonData = json.loads(request.data.decode('utf-8'))
-    
+    jsonData = bottle.request.json
     #print(jsonData)
     
     height_of_board = jsonData["board"]["height"]
@@ -311,19 +341,15 @@ def move():
     Direction=best_direction
     
     print("Direction is: ", Direction)
-    
-    #Direction = "right"
-    response = {
-        "move": Direction
-    }
+
     
     endtime=time.time()
     print("time: " , endtime-starttime)
-    return jsonify(response)
+    
+    return move_response(Direction)
 
 
-
-def choose_direction(jsonData,my_head_x_component,my_head_y_component):
+    def choose_direction(jsonData,my_head_x_component,my_head_y_component):
     
     food_location_relative_to_me=find_food_location_relative_to_me(jsonData,my_head_x_component,my_head_y_component)
     #print("Food location relative to me: " ,food_location_relative_to_me)
@@ -846,9 +872,27 @@ def simulate(jsonData_copy,Direction,jsonData):
     
     return(simulation,"Simulation snake is alive")
 
-
-
-if __name__ == "__main__":
-    # Don't forget to change the IP address before you try to run it locally
-    app.run(host='192.168.56.1', port=8088, debug=True)
     
+    
+@bottle.post('/end')
+def end():
+    data = bottle.request.json
+
+    """
+    TODO: If your snake AI was stateful,
+        clean up any stateful objects here.
+    """
+    #print(json.dumps(data))
+
+    return end_response()
+
+# Expose WSGI app (so gunicorn can find it)
+application = bottle.default_app()
+
+if __name__ == '__main__':
+    bottle.run(
+        application,
+        host=os.getenv('IP', '0.0.0.0'),
+        port=os.getenv('PORT', '8080'),
+        debug=os.getenv('DEBUG', True)
+    )
