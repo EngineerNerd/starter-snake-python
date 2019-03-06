@@ -6,7 +6,7 @@ import time
 
 from api import ping_response, start_response, move_response, end_response
 
-from print_grid import *
+#from print_grid import *
 
 @bottle.route('/')
 def index():
@@ -55,7 +55,7 @@ def move():
     jsonData = bottle.request.json
     #print(jsonData)
     
-    print("\n\n",jsonData["turn"])
+    print("\n\n" + str(jsonData["turn"]))
     
     height_of_board = jsonData["board"]["height"]
     width_of_board = jsonData["board"]["width"]
@@ -142,6 +142,7 @@ def move():
     best_direction= Direction
     last_location=[curent_simulation[0][0],curent_simulation[0][1]]
     number_of_simulations_survived=e-1
+    print("Time 1: " + str(time.time()-starttime))
     
     e = 1
      # ------------------------------------------------------------------------------------------------------------------------------------------- 2
@@ -175,7 +176,13 @@ def move():
             # last_location=[curent_simulation[0][0],curent_simulation[0][1]]
             # number_of_simulations_survived=e-1
     
+	
+	print("Time 2: " + str(time.time()-starttime))
+	
+	
     e = 2
+	
+
      # ------------------------------------------------------------------------------------------------------------------------------------------- 3
      # -------------------------------------------------------------------------------------------------------------------------------------------
     curent_simulation = simulate(snake_location_copyjsonData(jsonData,my_head_x_component,my_head_y_component),"left",jsonData)[0]
@@ -214,7 +221,7 @@ def move():
             # last_location=[curent_simulation[0][0],curent_simulation[0][1]]
             # number_of_simulations_survived=e-1
     
-    
+    print("Time 3: " + str(time.time()-starttime))
     
     e = 2
      # ------------------------------------------------------------------------------------------------------------------------------------------- 4
@@ -255,6 +262,7 @@ def move():
             # last_location=[curent_simulation[0][0],curent_simulation[0][1]]
             # number_of_simulations_survived=e-1
     
+	print("Time 4: " + str(time.time()-starttime))
     
     e = 2
      # ------------------------------------------------------------------------------------------------------------------------------------------- 5
@@ -295,7 +303,7 @@ def move():
             # last_location=[curent_simulation[0][0],curent_simulation[0][1]]
             # number_of_simulations_survived=e-1
     
-    
+    print("Time 5: " + str(time.time()-starttime))
     
     e = 2
      # ------------------------------------------------------------------------------------------------------------------------------------------- 6
@@ -338,16 +346,17 @@ def move():
             # number_of_simulations_survived=e-1
     
     
-    
-    print("Best Direction: ", best_direction,"\nLast Location: ", last_location,"\n Number of simulations survived: ", number_of_simulations_survived)
+    print("Time 6: " + str(time.time()-starttime))
+	
+    print("Best Direction: " + str(best_direction) + "\nLast Location: " + str(last_location) +"\n Number of simulations survived: " + str(number_of_simulations_survived))
     
     Direction=best_direction
     
-    print("Direction is: ", Direction)
+    print("Direction is: "+  str(Direction))
 
     
     endtime=time.time()
-    print("time: " , endtime-starttime)
+    print("Final time: " + str(endtime-starttime))
     if endtime-starttime > .250:
         print("Overtime!")
     
